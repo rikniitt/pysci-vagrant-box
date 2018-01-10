@@ -18,7 +18,6 @@ Vagrant.configure("2") do |config|
       "unzip"
     ].join(" "),
     :default_credentials => {
-      :user => "pysci",
       :password => "pysci"
     },
     :other => [
@@ -42,17 +41,22 @@ Vagrant.configure("2") do |config|
       ].join(" "),
       :pip_packages => [
         "scikit-learn",
-        "python-dotenv"
+        "python-dotenv",
+        "neo4j-driver",
+        "py2neo"
       ].join(" ")
     },
     :storage => [
       "mongodb-server",
       "mysql-server",
-      "redis-server"
+      "redis-server",
+      "neo4j"
     ].join(" ")
   }
 
   config.vm.provision "shell", inline: <<-SHELL
+    wget --no-check-certificate -O - https://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
+    echo 'deb http://debian.neo4j.org/repo stable/' | tee /etc/apt/sources.list.d/neo4j.list
     apt-get update
     locale-gen "en_US.UTF-8" "fi_FI.UTF-8"
     echo -e 'LANG="fi_FI.UTF-8"\nLANGUAGE="en_US:en"\nLC_ALL="fi_FI.UTF-8"\n' > /etc/default/locale
@@ -62,6 +66,7 @@ Vagrant.configure("2") do |config|
     debconf-set-selections <<< "mysql-server mysql-server/root_password password #{pysci_config[:default_credentials][:password]}"
     debconf-set-selections <<< "mysql-server mysql-server/root_password_again password #{pysci_config[:default_credentials][:password]}"
     apt-get install -y #{pysci_config[:storage]}
+    curl -i -H 'content-type: applciation/json' -d '{"password":"#{pysci_config[:default_credentials][:password]}"}' http://neo4j:neo4j@localhost:7474/user/neo4j/password
   SHELL
 
   config.vm.provision "shell", privileged:false, inline: <<-SHELL
