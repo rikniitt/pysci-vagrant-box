@@ -73,7 +73,7 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "shell", privileged:false, inline: <<-SHELL
-    pip install -U #{pysci_config[:python][:pip_packages]}
+    pip install --no-cache-dir -U #{pysci_config[:python][:pip_packages]}
     python -m nltk.downloader all
   SHELL
 
