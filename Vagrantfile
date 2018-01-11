@@ -7,6 +7,11 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "pysci-box"
   config.ssh.forward_x11 = true
 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 4096
+    vb.cpus = 4
+  end
+
   pysci_config = {
     :basic_packages => [
       "build-essential",
@@ -34,11 +39,14 @@ Vagrant.configure("2") do |config|
         "python-numpy",
         "python-matplotlib",
         "python-pandas",
+        "python-nltk",
         "python-pymongo",
         "python-mysqldb",
         "python-mysql.connector",
         "python-redis",
-        "python-nltk"
+        "python-couchdb",
+        "python-cassandra",
+        "python-pycassa"
       ].join(" "),
       :pip_packages => [
         "scikit-learn",
@@ -53,22 +61,24 @@ Vagrant.configure("2") do |config|
       "mongodb-server",
       "mysql-server",
       "redis-server",
-      "neo4j"
+      "neo4j",
+      "couchdb",
+      "cassandra"
     ].join(" ")
   }
 
   config.vm.provision "shell", inline: <<-SHELL
     wget --no-check-certificate -O - https://debian.neo4j.org/neotechnology.gpg.key | apt-key add -
+    wget --no-check-certificate -O - https://www.apache.org/dist/cassandra/KEYS | apt-key add -
+    apt-key adv --keyserver pool.sks-keyservers.net --recv-key A278B781FE4B2BDA
     echo 'deb http://debian.neo4j.org/repo stable/' | tee /etc/apt/sources.list.d/neo4j.list
+    echo 'deb http://www.apache.org/dist/cassandra/debian 311x main' | tee /etc/apt/sources.list.d/cassandra.sources.list
     apt-get update
     locale-gen "en_US.UTF-8" "fi_FI.UTF-8"
     echo -e 'LANG="fi_FI.UTF-8"\nLANGUAGE="en_US:en"\nLC_ALL="fi_FI.UTF-8"\n' > /etc/default/locale
-    apt-get install -y #{pysci_config[:basic_packages]}
-    apt-get install -y #{pysci_config[:other]}
-    apt-get install -y #{pysci_config[:python][:packages]}
     debconf-set-selections <<< "mysql-server mysql-server/root_password password #{pysci_config[:default_credentials][:password]}"
     debconf-set-selections <<< "mysql-server mysql-server/root_password_again password #{pysci_config[:default_credentials][:password]}"
-    apt-get install -y #{pysci_config[:storage]}
+    apt-get install -y #{pysci_config[:basic_packages]} #{pysci_config[:other]} #{pysci_config[:python][:packages]} #{pysci_config[:storage]}
     curl -i -H 'content-type: applciation/json' -d '{"password":"#{pysci_config[:default_credentials][:password]}"}' http://neo4j:neo4j@localhost:7474/user/neo4j/password
   SHELL
 
