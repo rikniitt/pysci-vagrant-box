@@ -37,13 +37,16 @@ Vagrant.configure("2") do |config|
         "python-pymongo",
         "python-mysqldb",
         "python-mysql.connector",
-        "python-redis"
+        "python-redis",
+        "python-nltk"
       ].join(" "),
       :pip_packages => [
         "scikit-learn",
         "python-dotenv",
         "neo4j-driver",
-        "py2neo"
+        "py2neo",
+        "pybrain",
+        "tensorflow"
       ].join(" ")
     },
     :storage => [
@@ -71,6 +74,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", privileged:false, inline: <<-SHELL
     pip install -U #{pysci_config[:python][:pip_packages]}
+    python -m nltk.downloader all
   SHELL
 
 end
