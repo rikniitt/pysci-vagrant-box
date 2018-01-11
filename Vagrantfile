@@ -46,7 +46,8 @@ Vagrant.configure("2") do |config|
         "python-redis",
         "python-couchdb",
         "python-cassandra",
-        "python-pycassa"
+        "python-pycassa",
+        "python-pysqlite2"
       ].join(" "),
       :pip_packages => [
         "scikit-learn",
@@ -63,7 +64,8 @@ Vagrant.configure("2") do |config|
       "redis-server",
       "neo4j",
       "couchdb",
-      "cassandra"
+      "cassandra",
+      "sqlite"
     ].join(" ")
   }
 
