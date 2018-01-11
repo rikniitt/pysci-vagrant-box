@@ -81,7 +81,6 @@ Vagrant.configure("2") do |config|
     debconf-set-selections <<< "mysql-server mysql-server/root_password password #{pysci_config[:default_credentials][:password]}"
     debconf-set-selections <<< "mysql-server mysql-server/root_password_again password #{pysci_config[:default_credentials][:password]}"
     apt-get install -y #{pysci_config[:basic_packages]} #{pysci_config[:other]} #{pysci_config[:python][:packages]} #{pysci_config[:storage]}
-    curl -i -H 'content-type: applciation/json' -d '{"password":"#{pysci_config[:default_credentials][:password]}"}' http://neo4j:neo4j@localhost:7474/user/neo4j/password
   SHELL
 
   config.vm.provision "shell", privileged:false, inline: <<-SHELL
