@@ -45,17 +45,17 @@ Vagrant.configure("2") do |config|
         "python-mysql.connector",
         "python-redis",
         "python-couchdb",
-        "python-cassandra",
         "python-pycassa",
         "python-pysqlite2"
       ].join(" "),
       :pip_packages => [
         "scikit-learn",
         "python-dotenv",
+        "pybrain",
+        "tensorflow",
         "neo4j-driver",
         "py2neo",
-        "pybrain",
-        "tensorflow"
+        "cassandra-driver==3.10"
       ].join(" ")
     },
     :storage => [
