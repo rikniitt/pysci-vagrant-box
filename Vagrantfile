@@ -40,6 +40,8 @@ Vagrant.configure("2") do |config|
         "python-matplotlib",
         "python-pandas",
         "python-nltk",
+        "python-statsmodels",
+        "python-seaborn",
         "python-pymongo",
         "python-mysqldb",
         "python-mysql.connector",
