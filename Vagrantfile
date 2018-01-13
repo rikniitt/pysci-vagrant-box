@@ -88,6 +88,10 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", privileged:false, inline: <<-SHELL
     pip install --no-cache-dir -U #{pysci_config[:python][:pip_packages]}
     python -m nltk.downloader all
+    cat << EOF >> ~/.bash_aliases
+alias new-python='echo -e "#!/usr/bin/env python\n# -*- coding: utf-8 -*-\n\nimport sys, os\nimport numpy as np\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport statsmodels.api as sm\n\ndef main(argc, argv, srcdir):\n    #put code here\n    return 0\n\n\nif __name__ == \"__main__\":\n    sys.exit(main(len(sys.argv), sys.argv, os.path.dirname(os.path.realpath(__file__))))"'
+alias new-bash='echo -e "#!/usr/bin/env bash\n\n#put code here"'
+EOF
   SHELL
 
 end
