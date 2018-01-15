@@ -59,7 +59,8 @@ Vagrant.configure("2") do |config|
         "tensorflow",
         "neo4j-driver",
         "py2neo",
-        "cassandra-driver==3.10"
+        "cassandra-driver==3.10",
+        "click"
       ].join(" ")
     },
     :storage => [
