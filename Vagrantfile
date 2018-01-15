@@ -49,7 +49,8 @@ Vagrant.configure("2") do |config|
         "python-redis",
         "python-couchdb",
         "python-pycassa",
-        "python-pysqlite2"
+        "python-pysqlite2",
+        "python-wxgtk3.0"
       ].join(" "),
       :pip_packages => [
         "scikit-learn",
@@ -60,7 +61,8 @@ Vagrant.configure("2") do |config|
         "neo4j-driver",
         "py2neo",
         "cassandra-driver==3.10",
-        "click"
+        "click",
+        "sqlalchemy"
       ].join(" ")
     },
     :storage => [
